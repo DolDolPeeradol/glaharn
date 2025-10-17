@@ -1,6 +1,17 @@
+export interface PaymentMethod {
+  promptpay?: string; // เบอร์โทรหรือเลข ID พร้อมเพย์
+  qrCodeImage?: string; // URL หรือ Base64 ของรูป QR Code
+  bankAccount?: {
+    bankName: string;
+    accountNumber: string;
+    accountName: string;
+  };
+}
+
 export interface Person {
   id: string;
   name: string;
+  paymentMethod?: PaymentMethod;
 }
 
 export interface Item {

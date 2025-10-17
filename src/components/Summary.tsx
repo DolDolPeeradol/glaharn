@@ -141,44 +141,108 @@ export default function Summary({ summary, payments, people }: SummaryProps) {
             </svg>
             วิธีการชำระเงิน
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {payments.map((payment, idx) => {
               const fromPerson = people.find((p) => p.id === payment.from);
               const toPerson = people.find((p) => p.id === payment.to);
               return (
                 <div
                   key={idx}
-                  className="bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-amber-500 p-5 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+                  className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 border-2 border-amber-200 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold shadow">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ring-2 ring-white">
                           {fromPerson?.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-bold text-gray-900">{fromPerson?.name}</span>
+                        <span className="font-bold text-gray-900 text-lg">{fromPerson?.name}</span>
                       </div>
 
-                      <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      <svg className="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
 
-                      <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold shadow">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg ring-2 ring-white">
                           {toPerson?.name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-bold text-gray-900">{toPerson?.name}</span>
+                        <span className="font-bold text-gray-900 text-lg">{toPerson?.name}</span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
-                      <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-lg border-2 border-red-200">
+                      <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
                       </svg>
-                      <span className="font-bold text-xl text-red-600">{payment.amount.toFixed(2)} ฿</span>
+                      <span className="font-bold text-2xl text-red-600">{payment.amount.toFixed(2)} ฿</span>
                     </div>
                   </div>
+
+                  {/* Payment Methods */}
+                  {toPerson?.paymentMethod && (
+                    <div className="mt-4 pt-4 border-t-2 border-amber-200">
+                      <p className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                        <svg className="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                        ช่องทางการโอนเงิน:
+                      </p>
+                      <div className="space-y-2">
+                        {toPerson.paymentMethod.promptpay && (
+                          <div className="flex items-center justify-between bg-white p-4 rounded-xl border-2 border-emerald-200 shadow-sm">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-600 font-semibold">พร้อมเพย์</p>
+                                <p className="text-lg font-bold text-gray-900">{toPerson.paymentMethod.promptpay}</p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => navigator.clipboard.writeText(toPerson.paymentMethod?.promptpay || '')}
+                              className="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm font-semibold shadow-md"
+                            >
+                              คัดลอก
+                            </button>
+                          </div>
+                        )}
+
+                        {toPerson.paymentMethod.bankAccount && (
+                          <div className="flex items-center justify-between bg-white p-4 rounded-xl border-2 border-blue-200 shadow-sm">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-600 font-semibold">บัญชีธนาคาร {toPerson.paymentMethod.bankAccount.bankName}</p>
+                                <p className="text-lg font-bold text-gray-900">{toPerson.paymentMethod.bankAccount.accountNumber}</p>
+                                <p className="text-xs text-gray-600">{toPerson.paymentMethod.bankAccount.accountName}</p>
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => navigator.clipboard.writeText(toPerson.paymentMethod?.bankAccount?.accountNumber || '')}
+                              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-semibold shadow-md"
+                            >
+                              คัดลอก
+                            </button>
+                          </div>
+                        )}
+
+                        {toPerson.paymentMethod.qrCodeImage && (
+                          <div className="bg-white p-4 rounded-xl border-2 border-gray-200 flex justify-center">
+                            <img src={toPerson.paymentMethod.qrCodeImage} alt="QR Code" className="w-48 h-48 object-contain rounded-lg shadow-md" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}

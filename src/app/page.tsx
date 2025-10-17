@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Person, Item, PersonSummary } from "@/types";
+import { Person, Item, PersonSummary, PaymentMethod } from "@/types";
 import Modal from "@/components/Modal";
 import PeopleChips from "@/components/PeopleChips";
 import CompactItemRow from "@/components/CompactItemRow";
@@ -133,45 +133,51 @@ export default function Home() {
     };
   };
 
+  const handleUpdatePaymentMethod = (personId: string, paymentMethod: PaymentMethod) => {
+    setPeople(people.map((p) => (p.id === personId ? { ...p, paymentMethod } : p)));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
-      {/* Beautiful Header */}
+      {/* Enhanced Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6bTAtMjBjMC0yLjIxIDEuNzktNCA0LTRzNCAxLjc5IDQgNC0xLjc5IDQtNCA0LTQtMS43OS00LTR6TTE2IDM0YzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00em0wLTIwYzAtMi4yMSAxLjc5LTQgNC00czQgMS43OSA0IDQtMS43OSA0LTQgNC00LTEuNzktNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
-        <div className="max-w-7xl mx-auto px-6 py-12 relative">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-6xl font-black text-white mb-3 drop-shadow-lg">
-              💰 แบ่งบิลปาร์ตี้
-            </h1>
-            <p className="text-emerald-50 text-lg md:text-xl font-medium">
-              แบ่งค่าใช้จ่ายแบบยุติธรรม ง่าย รวดเร็ว ชัดเจน
-            </p>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 relative">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div className="text-center lg:text-left">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 drop-shadow-lg">
+                💰 แบ่งบิลปาร์ตี้
+              </h1>
+              <p className="text-emerald-50 text-xs sm:text-sm md:text-base font-medium">
+                แบ่งค่าใช้จ่ายแบบยุติธรรม ง่าย รวดเร็ว ชัดเจน
+              </p>
+            </div>
 
-          {/* Stats Bar */}
-          <div className="grid grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/30">
-              <div className="text-3xl font-bold text-white">{people.length}</div>
-              <div className="text-sm text-emerald-50 mt-1">คน</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/30">
-              <div className="text-3xl font-bold text-white">{items.length}</div>
-              <div className="text-sm text-emerald-50 mt-1">รายการ</div>
-            </div>
-            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/30">
-              <div className="text-3xl font-bold text-white">{totalSpent.toFixed(0)}</div>
-              <div className="text-sm text-emerald-50 mt-1">บาท</div>
+            {/* Enhanced Stats */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full lg:w-auto">
+              <div className="bg-white/25 backdrop-blur-md rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 text-center border-2 border-white/40 shadow-lg hover:bg-white/30 transition-all">
+                <div className="text-xs sm:text-sm text-emerald-100 font-semibold mb-1">จำนวนคน</div>
+                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-lg">{people.length}</div>
+              </div>
+              <div className="bg-white/25 backdrop-blur-md rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 text-center border-2 border-white/40 shadow-lg hover:bg-white/30 transition-all">
+                <div className="text-xs sm:text-sm text-emerald-100 font-semibold mb-1">รายการ</div>
+                <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-lg">{items.length}</div>
+              </div>
+              <div className="bg-white/25 backdrop-blur-md rounded-xl sm:rounded-2xl px-3 sm:px-6 py-3 sm:py-4 text-center border-2 border-white/40 shadow-lg hover:bg-white/30 transition-all">
+                <div className="text-xs sm:text-sm text-emerald-100 font-semibold mb-1">ค่าใช้จ่าย</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white drop-shadow-lg">{totalSpent.toFixed(0)} ฿</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* People Section */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-3xl shadow-xl p-6 mb-6 border-2 border-emerald-100">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-              <span className="text-3xl">👥</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-2 border-emerald-100">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <span className="text-2xl sm:text-3xl">👥</span>
               สมาชิก
             </h2>
             <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">
@@ -187,22 +193,22 @@ export default function Home() {
           />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-3xl shadow-xl p-6 border-2 border-teal-100">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 border-2 border-teal-100">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <span className="text-3xl">🍽️</span>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                    <span className="text-2xl sm:text-3xl">🍽️</span>
                     รายการอาหาร
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1">{items.length} รายการทั้งหมด</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-1">{items.length} รายการทั้งหมด</p>
                 </div>
                 <button
                   onClick={() => setIsItemModalOpen(true)}
                   disabled={people.length === 0}
-                  className="px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-2xl hover:from-teal-600 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm flex items-center gap-2"
+                  className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-xl sm:rounded-2xl hover:from-teal-600 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm flex items-center justify-center gap-2"
                 >
                   <span className="text-xl">+</span>
                   เพิ่มรายการ
@@ -210,19 +216,19 @@ export default function Home() {
               </div>
 
               {people.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="text-7xl mb-4">👆</div>
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">เพิ่มสมาชิกก่อนนะ</h3>
-                  <p className="text-gray-500">กดปุ่ม "เพิ่มคน" ด้านบนเพื่อเริ่มต้น</p>
+                <div className="text-center py-12 sm:py-16">
+                  <div className="text-5xl sm:text-7xl mb-4">👆</div>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-700 mb-2">เพิ่มสมาชิกก่อนนะ</h3>
+                  <p className="text-sm sm:text-base text-gray-500">กดปุ่ม "เพิ่มคน" ด้านบนเพื่อเริ่มต้น</p>
                 </div>
               ) : items.length === 0 ? (
-                <div className="text-center py-16">
-                  <div className="text-7xl mb-4">🍴</div>
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">ยังไม่มีรายการอาหาร</h3>
-                  <p className="text-gray-500 mb-4">เริ่มเพิ่มเมนูที่สั่งกันได้เลย!</p>
+                <div className="text-center py-12 sm:py-16">
+                  <div className="text-5xl sm:text-7xl mb-4">🍴</div>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-700 mb-2">ยังไม่มีรายการอาหาร</h3>
+                  <p className="text-sm sm:text-base text-gray-500 mb-4">เริ่มเพิ่มเมนูที่สั่งกันได้เลย!</p>
                   <button
                     onClick={() => setIsItemModalOpen(true)}
-                    className="px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-2xl hover:from-teal-600 hover:to-emerald-700 transition-all shadow-lg font-semibold"
+                    className="px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-teal-500 to-emerald-600 text-white rounded-xl sm:rounded-2xl hover:from-teal-600 hover:to-emerald-700 transition-all shadow-lg font-semibold text-sm sm:text-base"
                   >
                     เพิ่มรายการแรก
                   </button>
@@ -377,7 +383,7 @@ export default function Home() {
 
       {selectedPerson && (
         <PersonDetailModal
-          person={selectedPerson}
+          person={people.find(p => p.id === selectedPerson.id) || selectedPerson}
           isOpen={isPersonDetailOpen}
           onClose={() => { setIsPersonDetailOpen(false); setSelectedPerson(null); }}
           summary={summary[selectedPerson.id]}
@@ -385,6 +391,7 @@ export default function Home() {
           allPeople={people}
           paymentsToMake={getPersonPayments(selectedPerson.id).paymentsToMake}
           paymentsToReceive={getPersonPayments(selectedPerson.id).paymentsToReceive}
+          onUpdatePaymentMethod={handleUpdatePaymentMethod}
         />
       )}
     </div>
