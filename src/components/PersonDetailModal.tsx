@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Person, PersonSummary, Item, Payment, PaymentMethod } from "@/types";
+import { Person, PersonSummary, Item, Payment, PaymentMethod, Comment } from "@/types";
 import Modal from "./Modal";
+import GuestFoodSelector from "./GuestFoodSelector";
+import CommentSection from "./CommentSection";
 
 interface PersonDetailModalProps {
   person: Person | null;
@@ -14,6 +16,12 @@ interface PersonDetailModalProps {
   paymentsToMake: Payment[];
   paymentsToReceive: Payment[];
   onUpdatePaymentMethod: (personId: string, paymentMethod: PaymentMethod) => void;
+  partyId?: string;
+  isGuest?: boolean;
+  onToggleFoodItem?: (personId: string, itemId: string, isExcluded: boolean) => Promise<void>;
+  comments?: Comment[];
+  onAddComment?: (text: string, authorName: string) => Promise<void>;
+  onDeleteComment?: (commentId: string) => Promise<void>;
 }
 
 export default function PersonDetailModal({
@@ -26,6 +34,12 @@ export default function PersonDetailModal({
   paymentsToMake,
   paymentsToReceive,
   onUpdatePaymentMethod,
+  partyId,
+  isGuest = false,
+  onToggleFoodItem,
+  comments = [],
+  onAddComment,
+  onDeleteComment,
 }: PersonDetailModalProps) {
   const [isEditingPayment, setIsEditingPayment] = useState(false);
   const [promptpay, setPromptpay] = useState(person?.paymentMethod?.promptpay || "");
@@ -120,6 +134,20 @@ export default function PersonDetailModal({
             </div>
           </div>
         </div>
+
+        {/* Guest Food Selector - Full Width */}
+        {isGuest && partyId && onToggleFoodItem && (
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-200">
+            <GuestFoodSelector
+              partyId={partyId}
+              person={person}
+              allItems={allItems}
+              onToggleItem={async (itemId, isExcluded) => {
+                await onToggleFoodItem(person.id, itemId, isExcluded);
+              }}
+            />
+          </div>
+        )}
 
         {/* 2 Column Layout - Responsive */}
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
@@ -543,6 +571,20 @@ export default function PersonDetailModal({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
             </svg>
             <p className="text-gray-500 text-lg">ยังไม่มีรายการ</p>
+          </div>
+        )}
+
+        {/* Comment Section */}
+        {partyId && onAddComment && (
+          <div className="border-t border-gray-200 pt-6">
+            <CommentSection
+              partyId={partyId}
+              personId={person.id}
+              personName={person.name}
+              comments={comments}
+              onAddComment={onAddComment}
+              onDeleteComment={onDeleteComment}
+            />
           </div>
         )}
       </div>

@@ -1,14 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Person, Item, PersonSummary, PaymentMethod } from "@/types";
 import Modal from "@/components/Modal";
 import PeopleChips from "@/components/PeopleChips";
 import CompactItemRow from "@/components/CompactItemRow";
 import QuickSummary from "@/components/QuickSummary";
 import PersonDetailModal from "@/components/PersonDetailModal";
+import { useAuth } from "@/hooks/useAuth";
+import { createParty } from "@/lib/services";
 
 export default function Home() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
+  const [showModeSelection, setShowModeSelection] = useState(true);
+  const [isCreatingParty, setIsCreatingParty] = useState(false);
   const [people, setPeople] = useState<Person[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [isPersonModalOpen, setIsPersonModalOpen] = useState(false);
@@ -136,6 +143,77 @@ export default function Home() {
   const handleUpdatePaymentMethod = (personId: string, paymentMethod: PaymentMethod) => {
     setPeople(people.map((p) => (p.id === personId ? { ...p, paymentMethod } : p)));
   };
+
+  const handleCreateNewParty = async () => {
+    if (!user) return;
+    setIsCreatingParty(true);
+    try {
+      const partyId = await createParty(user.uid);
+      router.push(`/party/${partyId}`);
+    } catch (error) {
+      console.error("Error creating party:", error);
+      alert("เกิดข้อผิดพลาดในการสร้างปาร์ตี้");
+      setIsCreatingParty(false);
+    }
+  };
+
+  const handleUseDemoMode = () => {
+    setShowModeSelection(false);
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center">
+        <div className="text-2xl font-bold text-gray-700">กำลังโหลด...</div>
+      </div>
+    );
+  }
+
+  if (showModeSelection) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-gray-800 mb-4">
+              💰 แบ่งบิลปาร์ตี้
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600">
+              แบ่งค่าใช้จ่ายแบบยุติธรรม ง่าย รวดเร็ว ชัดเจน
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <button
+              onClick={handleCreateNewParty}
+              disabled={isCreatingParty}
+              className="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all border-2 border-emerald-200 hover:border-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <div className="text-6xl mb-4">🎉</div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-emerald-600 transition-colors">
+                {isCreatingParty ? "กำลังสร้าง..." : "สร้างปาร์ตี้ใหม่"}
+              </h2>
+              <p className="text-gray-600">
+                สร้างปาร์ตี้และแชร์ลิงก์ให้เพื่อน พร้อมระบบคำนวณอัตโนมัติ
+              </p>
+            </button>
+
+            <button
+              onClick={handleUseDemoMode}
+              className="group bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all border-2 border-teal-200 hover:border-teal-400"
+            >
+              <div className="text-6xl mb-4">🎮</div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-teal-600 transition-colors">
+                ทดลองใช้งาน
+              </h2>
+              <p className="text-gray-600">
+                ใช้งานแบบ Demo โดยไม่บันทึกข้อมูล (Offline)
+              </p>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
